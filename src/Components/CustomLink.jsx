@@ -1,10 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-const CustomLink = () => {
+const CustomLink = ({ to, children }) => {
     return (
-        <div>
-
-        </div>
+        <Link className='text-dark-subtle hover:text-white transition' to={to}>{children}</Link>
     );
 };
 
