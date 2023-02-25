@@ -1,16 +1,22 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useTheme } from '../../hook';
+import { commonModalClasses } from '../../utils/Theme';
 import Container from '../Container';
 import CustomLink from '../CustomLink';
+import FormContainer from '../form/FormContainer';
 import FormInput from '../form/FormInput';
 import Submit from '../form/Submit';
 import Title from '../form/Title';
 
 const Signin = () => {
+
+    const theme = useTheme()
+    console.log(theme)
+
     return (
-        <div className='fixed inset-0 bg-primary -z-10 flex justify-center items-center'>
+        <FormContainer >
             <Container>
-                <form action=" " className='bg-secondary rounded p-6 w-72 space-y-6'>
+                <form action=" " className={commonModalClasses + ' w-72'}>
                     <Title>Sign in</Title>
                     <FormInput
                         label="Email"
@@ -29,7 +35,7 @@ const Signin = () => {
                     </div>
                 </form>
             </Container>
-        </div>
+        </FormContainer >
     );
 };
 
