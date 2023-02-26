@@ -13,7 +13,7 @@ const FormInput = ({ name, placeholder, label, ...rest }) => {
             />
             <label
                 htmlFor={name}
-                className='text-white font-semibold dark:text-dark-subtle text-light-subtle dark:peer-focus:text-white  peer-focus:text-primary transition  self-start'>{label}</label>
+                className='font-semibold dark:text-dark-subtle text-light-subtle dark:peer-focus:text-white  peer-focus:text-primary transition  self-start'>{label}</label>
         </div>
     );
 };
