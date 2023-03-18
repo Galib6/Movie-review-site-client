@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Container from '../Container';
 import FormInput from '../form/FormInput';
 import Submit from '../form/Submit';
@@ -31,6 +32,8 @@ const validateUserInfo = ({ name, email, password }) => {
 
 
 const Signup = () => {
+    const navigate = useNavigate()
+
     const [userInfo, setUserInfo] = useState({
         name: "",
         email: "",
@@ -48,7 +51,12 @@ const Signup = () => {
         if (!ok) return console.log(error)
         const response = await createUser(userInfo);
         if (response.error) return console.log(response.error);
-        console.log(response.user)
+
+        navigate("/auth/verification",
+            {
+                state: { user: response.user },
+                replace: true
+            })
     }
 
 

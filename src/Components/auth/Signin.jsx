@@ -11,7 +11,6 @@ import Title from '../form/Title';
 const Signin = () => {
 
     const theme = useTheme()
-    console.log(theme)
 
     return (
         <FormContainer >
