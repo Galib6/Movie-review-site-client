@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { forgetPassword } from '../../api/auth';
+import { useNotification } from '../../hook';
+import { isValidEmail } from '../../utils/helper';
 import { commonModalClasses } from '../../utils/Theme';
 import Container from '../Container';
 import CustomLink from '../CustomLink';
@@ -8,12 +11,36 @@ import Submit from '../form/Submit';
 import Title from '../form/Title';
 
 const ForgotPassword = () => {
+    const [email, setEmail] = useState('')
+    const { updateNotification } = useNotification()
+
+    const handleChange = ({ target }) => {
+        const { value } = target
+        setEmail(value)
+    }
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        if (!isValidEmail(email)) return updateNotification("error", "Invalid Email")
+
+        const { error, messege } = await forgetPassword(email)
+
+        if (error) return updateNotification("error", error)
+
+        updateNotification("success", messege)
+
+    }
+
+
     return (
         <FormContainer >
             <Container>
-                <form className={commonModalClasses + ' w-96 '}>
+                <form onSubmit={handleSubmit} className={commonModalClasses + ' w-96 '}>
                     <Title>Please Enter Your Email</Title>
                     <FormInput
+                        onChange={handleChange}
+                        value={email}
                         label="Email"
                         placeholder="galib@gmail.com"
                         name="email"

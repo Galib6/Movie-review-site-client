@@ -6,6 +6,7 @@ import Home from "../Components/Home";
 import Emailverification from "../Components/auth/Emailverification";
 import ForgotPassword from "../Components/auth/ForgotPassword";
 import ConfirmPassword from "../Components/auth/ConfirmPassword";
+import Notfound from "../Components/Notfound";
 
 
 export const router = createBrowserRouter([
@@ -35,8 +36,12 @@ export const router = createBrowserRouter([
                 element: <ForgotPassword></ForgotPassword>
             },
             {
-                path: "auth/confirm-password",
+                path: "auth/reset-password",
                 element: <ConfirmPassword></ConfirmPassword>
+            },
+            {
+                path: "*",
+                element: <Notfound></Notfound>
             },
 
         ]

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Container from '../Container';
 import FormInput from '../form/FormInput';
@@ -8,19 +8,22 @@ import CustomLink from '../CustomLink';
 import { commonModalClasses } from '../../utils/Theme';
 import FormContainer from '../form/FormContainer';
 import { createUser } from '../../api/auth';
+import { useAuth, useNotification } from '../../hook';
+import { isValidEmail } from '../../utils/helper';
 
 
 
 const validateUserInfo = ({ name, email, password }) => {
 
-    const isValidEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    // const isValidEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
     const isValidName = /^[a-z A-Z]+$/;
 
     if (!name.trim()) return { ok: false, error: "Name is missing!" };
     if (!isValidName.test(name)) return { ok: false, error: "Invalid name!" };
 
     if (!email.trim()) return { ok: false, error: "Email is missing!" };
-    if (!isValidEmail.test(email)) return { ok: false, error: "Invalid email!" };
+    if (!isValidEmail(email)) return { ok: false, error: "Invalid email!" };
 
     if (!password.trim()) return { ok: false, error: "Password is missing!" };
     if (password.length < 8)
@@ -33,6 +36,11 @@ const validateUserInfo = ({ name, email, password }) => {
 
 const Signup = () => {
     const navigate = useNavigate()
+
+    const { updateNotification } = useNotification()
+    const { handleLogin, authInfo } = useAuth()
+    const { isPending, isLoggedIn } = authInfo
+
 
     const [userInfo, setUserInfo] = useState({
         name: "",
@@ -48,9 +56,9 @@ const Signup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         const { ok, error } = validateUserInfo(userInfo);
-        if (!ok) return console.log(error)
+        if (!ok) return updateNotification("error", error)
         const response = await createUser(userInfo);
-        if (response.error) return console.log(response.error);
+        if (response.error) return updateNotification("error", response.error);
 
         navigate("/auth/verification",
             {
@@ -58,6 +66,12 @@ const Signup = () => {
                 replace: true
             })
     }
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate("/")
+        } // we want to move out user somewhere else
+    }, [isLoggedIn])
 
 
     const { name, email, password } = userInfo
