@@ -77,7 +77,7 @@ export const forgetPassword = async (email) => {
 
 export const verifyPasswordResetToken = async (token, userId) => {
     try {
-        const { data } = await client.post("/user/forget-password",
+        const { data } = await client.post("/user/verify-password-reset-token",
             {
                 token,
                 userId
