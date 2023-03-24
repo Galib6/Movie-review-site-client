@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { verifyUserEmail } from '../../api/auth';
+import { resendEmailverificationToken, verifyUserEmail } from '../../api/auth';
 import { useAuth, useNotification } from '../../hook';
 import { commonModalClasses } from '../../utils/Theme';
 import Container from '../Container';
@@ -31,7 +31,8 @@ const Emailverification = () => {
     const inputRef = useRef();
     const { updateNotification } = useNotification()
     const { isAuth, authInfo } = useAuth()
-    const { isLoggedIn } = authInfo
+    const { isLoggedIn, profile } = authInfo;
+    const isVerified = profile?.isVerified
 
     const { state } = useLocation();
     const user = state?.user
@@ -59,6 +60,13 @@ const Emailverification = () => {
 
         setOtp([...newOtp]);
     };
+
+    const handleOTPResend = async () => {
+        const { error, messege } = await resendEmailverificationToken(user.id)
+        if (error) return updateNotification("error", error)
+
+        updateNotification("success", messege)
+    }
 
     const handleKeyDown = ({ key }, index) => {
         if (key === "Backspace") {
@@ -91,8 +99,8 @@ const Emailverification = () => {
 
     useEffect(() => {
         if (!user) navigate("/notfound")
-        if (isLoggedIn) navigate("/")
-    }, [user, isLoggedIn])
+        if (isLoggedIn && isVerified) navigate("/")
+    }, [user, isLoggedIn, isVerified])
 
     return (
         <FormContainer >
@@ -118,7 +126,14 @@ const Emailverification = () => {
                             );
                         })}
                     </div>
-                    <Submit value="Verify Account"></Submit>
+                    <div>
+                        <Submit value="Verify Account"></Submit>
+                        <button
+                            onClick={handleOTPResend}
+                            type='button'
+                            className='dark:text-white text-blue-500 font-semibold hover:underline mt-2'
+                        >I don't have the OTP</button>
+                    </div>
                 </form>
             </Container>
         </FormContainer>

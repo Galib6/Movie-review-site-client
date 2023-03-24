@@ -5,13 +5,13 @@ import { ThemeProvider } from './ThemeProvider';
 
 const ContextProvider = ({ children }) => {
     return (
-        <AuthProvider>
-            <NotificationProvider>
+        <NotificationProvider>
+            <AuthProvider>
                 <ThemeProvider>
                     {children}
                 </ThemeProvider>
-            </NotificationProvider>
-        </AuthProvider>
+            </AuthProvider>
+        </NotificationProvider>
     );
 };
 

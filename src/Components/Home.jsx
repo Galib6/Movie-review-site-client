@@ -1,9 +1,15 @@
 import React from 'react';
+import NotVerified from './User/NotVerified';
+
+
 
 const Home = () => {
+
+
+
     return (
         <div>
-            Home
+            <NotVerified></NotVerified>
         </div>
     );
 };
